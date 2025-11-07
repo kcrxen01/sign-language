@@ -8,6 +8,8 @@ pip install mediapipe==0.10.11
 pip install tensorflow==2.10
 pip install cvzone
 
+im using a local host database here to store the login and registration.
+
 note: if it does not work try to open your virtual environment (.\venv\Scripts\Activate.ps1). 
 Your terminal will look like this "(venv) PS C:\Users\USER\Hand detector>". 
 If it still does not work, please refer to other online resources to address your concerns. Thank you
