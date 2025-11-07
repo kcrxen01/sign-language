@@ -51,7 +51,7 @@ class HandGestureApp:
             "Angry": "Feeling strong displeasure or hostility.",
             "Hate": "Intense dislike or strong aversion.",
             "Good luck": "Wishing success or positive outcome.",
-            "Live long and prosper" :" ",
+            "Live long and prosper": "A common Vulcan greeting expressing good wishes.", # Corrected description
         }
 
     def preprocess_hand(self, img, bbox):
@@ -98,14 +98,31 @@ class HandGestureApp:
 
     def draw_info(self, img_output, bbox, text, color):
         x, y, w, h = bbox
-        (w_text, h_text), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, 1)
-        top_left = (x - self.offset, y - self.offset - h_text - 40)
-        bottom_right = (x - self.offset + w_text + 20, y - self.offset)
+        font_scale = 0.6
+        thickness = 1
+        line_height = 20  
+
+        if ": " in text:
+            label, meaning = text.split(": ", 1)
+            lines = [f"{label}:", meaning]
+        else:
+            lines = [text]
+
+        rect_height = line_height * len(lines) + 10
+        rect_width = max(cv2.getTextSize(line, cv2.FONT_HERSHEY_COMPLEX_SMALL, font_scale, thickness)[0][0] for line in lines) + 20
+
+        top_left = (x - self.offset, y - self.offset - rect_height)
+        bottom_right = (x - self.offset + rect_width, y - self.offset)
+
         cv2.rectangle(img_output, top_left, bottom_right, color, cv2.FILLED)
-        cv2.putText(img_output, text, (x - self.offset + 10, y - self.offset - 10),
-                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 1.2, (0, 0, 0), 1)
+
+        for i, line in enumerate(lines):
+            cv2.putText(img_output, line, (x - self.offset + 10, y - self.offset - rect_height + (i+1)*line_height),
+                        cv2.FONT_HERSHEY_COMPLEX_SMALL, font_scale, (0, 0, 0), thickness)
+
         cv2.rectangle(img_output, (x - self.offset, y - self.offset),
                       (x + w + self.offset, y + h + self.offset), color, 3)
+
 
     def draw_ui_labels(self, img_output):
         cv2.putText(img_output, "Press keys to switch mode:", (10, 30),
