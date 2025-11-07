@@ -51,7 +51,7 @@ class HandGestureApp:
             "Angry": "Feeling strong displeasure or hostility.",
             "Hate": "Intense dislike or strong aversion.",
             "Good luck": "Wishing success or positive outcome.",
-            "Live long and prosper": "A common Vulcan greeting expressing good wishes.", # Corrected description
+            "Live long and prosper": "A common Vulcan greeting expressing good wishes.",
         }
 
     def preprocess_hand(self, img, bbox):
